@@ -38,6 +38,10 @@ export function HomePage() {
           seller_id: '1',
           seller_phone: '2250707070707',
           status: 'active',
+          condition: 'used-excellent',
+          negotiable: true,
+          views: 120,
+          favoritesCount: 8,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         },
@@ -53,6 +57,10 @@ export function HomePage() {
           seller_id: '2',
           seller_phone: '221770707070',
           status: 'active',
+          condition: 'used-good',
+          negotiable: false,
+          views: 340,
+          favoritesCount: 22,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         },
@@ -68,6 +76,10 @@ export function HomePage() {
           seller_id: '3',
           seller_phone: '22997070707',
           status: 'active',
+          condition: 'used-excellent',
+          negotiable: true,
+          views: 89,
+          favoritesCount: 5,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }
