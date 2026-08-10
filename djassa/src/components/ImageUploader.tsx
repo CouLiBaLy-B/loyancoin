@@ -4,17 +4,20 @@ import { Upload, X, Image as ImageIcon } from 'lucide-react';
 
 interface ImageUploaderProps {
   onImagesUploaded: (urls: string[]) => void;
+  onFilesChange?: (files: File[]) => void;
   maxImages?: number;
   existingImages?: string[];
 }
 
 export function ImageUploader({ 
   onImagesUploaded, 
+  onFilesChange,
   maxImages = 5, 
   existingImages = [] 
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [previews, setPreviews] = useState<string[]>(existingImages);
+  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadImages } = useDjassa();
 
@@ -63,6 +66,12 @@ export function ImageUploader({
 
       // Ajouter les previews immédiatement
       setPreviews(prev => [...prev, ...newPreviews]);
+      setFiles(prev => [...prev, ...filesToUpload]);
+      
+      // Notifier le parent des fichiers
+      if (onFilesChange) {
+        onFilesChange([...files, ...filesToUpload]);
+      }
 
       // Upload en arrière-plan
       const uploadedUrls = await uploadImages(filesToUpload);
@@ -89,7 +98,16 @@ export function ImageUploader({
     }
 
     const newPreviews = previews.filter((_, i) => i !== index);
+    const newFiles = files.filter((_, i) => i !== index);
+    
     setPreviews(newPreviews);
+    setFiles(newFiles);
+    
+    // Notifier le parent
+    if (onFilesChange) {
+      onFilesChange(newFiles);
+    }
+    
     onImagesUploaded(newPreviews);
   };
 

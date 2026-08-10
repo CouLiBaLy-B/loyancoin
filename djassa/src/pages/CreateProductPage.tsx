@@ -4,6 +4,7 @@ import { useDjassa } from '../contexts/DjassaContext';
 import { ImageUploader } from '../components/ImageUploader';
 import { LocationPicker } from '../components/LocationPicker';
 import { ArrowLeft, DollarSign, Tag, MapPin, AlertCircle } from 'lucide-react';
+import { uploadMultipleImages, optimizeImage } from '../lib/storage';
 
 const CATEGORIES = [
   { id: 'vehicles', name: 'Véhicules', icon: '🚗' },
@@ -41,14 +42,16 @@ export function CreateProductPage() {
     description: '',
     price: '',
     currency: 'XOF',
-    categoryId: '',
+    category: '',
     condition: 'good',
     negotiable: true,
   });
   
   const [images, setImages] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [location, setLocation] = useState<LocationData | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!user) {
@@ -92,8 +95,8 @@ export function CreateProductPage() {
       newErrors.price = 'Le prix doit être supérieur à 0';
     }
 
-    if (!formData.categoryId) {
-      newErrors.categoryId = 'La catégorie est obligatoire';
+    if (!formData.category) {
+      newErrors.category = 'La catégorie est obligatoire';
     }
 
     if (images.length === 0) {
@@ -117,25 +120,56 @@ export function CreateProductPage() {
     }
 
     setSubmitting(true);
+    setUploadProgress(10);
 
     try {
+      // Upload des images si Supabase est configuré
+      let uploadedImages: string[] = images;
+      
+      if (imageFiles.length > 0 && import.meta.env.VITE_SUPABASE_URL) {
+        setUploadProgress(30);
+        
+        // Optimiser et uploader les images
+        const optimizedFiles = await Promise.all(
+          imageFiles.map(file => optimizeImage(file, 1920, 1920, 0.8))
+        );
+        
+        setUploadProgress(60);
+        
+        const blobs = optimizedFiles.map((blob, index) => 
+          new File([blob], imageFiles[index].name, { type: blob.type })
+        );
+        
+        uploadedImages = await uploadMultipleImages(blobs);
+        setUploadProgress(90);
+        
+        if (uploadedImages.length === 0) {
+          throw new Error('Échec de l\'upload des images');
+        }
+      }
+
       await createProduct({
         title: formData.title,
         description: formData.description,
         price: parseFloat(formData.price),
         currency: formData.currency,
-        categoryId: formData.categoryId,
+        category: formData.category,
         condition: formData.condition as any,
         negotiable: formData.negotiable,
-        images,
+        images: uploadedImages,
         location: location as any || undefined,
       });
 
+      setUploadProgress(100);
+      
       // Succès - redirection vers le dashboard
-      navigate('/dashboard/seller?success=created');
+      setTimeout(() => {
+        navigate('/dashboard/seller?success=created');
+      }, 500);
     } catch (error) {
       console.error('Erreur création produit:', error);
       alert('Erreur lors de la création de l\'annonce. Réessayez.');
+      setUploadProgress(0);
     } finally {
       setSubmitting(false);
     }
@@ -146,6 +180,10 @@ export function CreateProductPage() {
     if (errors.images) {
       setErrors(prev => ({ ...prev, images: '' }));
     }
+  };
+
+  const handleImageFilesChange = (files: File[]) => {
+    setImageFiles(files);
   };
 
   const handleLocationSelect = (loc: LocationData) => {
@@ -237,11 +275,29 @@ export function CreateProductPage() {
         <section>
           <ImageUploader
             onImagesUploaded={handleImageUpload}
+            onFilesChange={handleImageFilesChange}
             maxImages={5}
             existingImages={images}
           />
           {errors.images && (
             <p className="text-sm mt-2" style={{ color: '#ef4444' }}>{errors.images}</p>
+          )}
+          {uploadProgress > 0 && uploadProgress < 100 && (
+            <div className="mt-4">
+              <div className="flex justify-between text-xs mb-2" style={{ color: 'var(--ink-soft)' }}>
+                <span>Upload des images en cours...</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full" style={{ backgroundColor: 'var(--line)' }}>
+                <div 
+                  className="h-full rounded-full transition-all duration-300"
+                  style={{ 
+                    width: `${uploadProgress}%`,
+                    backgroundColor: 'var(--clay)'
+                  }}
+                />
+              </div>
+            </div>
           )}
         </section>
 
@@ -305,12 +361,12 @@ export function CreateProductPage() {
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, categoryId: cat.id }))}
                 className={`p-4 rounded-lg border text-center transition-all ${
-                  formData.categoryId === cat.id
+                  formData.category === cat.id
                     ? 'border-[var(--clay)] bg-[var(--clay)]/10'
                     : 'hover:border-[var(--clay)]/50'
                 }`}
                 style={{ 
-                  borderColor: formData.categoryId === cat.id ? 'var(--clay)' : 'var(--line)',
+                  borderColor: formData.category === cat.id ? 'var(--clay)' : 'var(--line)',
                   color: 'var(--ink)'
                 }}
               >
@@ -319,8 +375,8 @@ export function CreateProductPage() {
               </button>
             ))}
           </div>
-          {errors.categoryId && (
-            <p className="text-sm" style={{ color: '#ef4444' }}>{errors.categoryId}</p>
+          {errors.category && (
+            <p className="text-sm" style={{ color: '#ef4444' }}>{errors.category}</p>
           )}
         </section>
 
