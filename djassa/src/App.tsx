@@ -1,25 +1,27 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
+import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
+import { DjassaProvider } from './contexts/DjassaContext'
 import { Header } from './components/Header'
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage'
 import { SellerDashboard } from './pages/SellerDashboard'
 import { BuyerDashboard } from './pages/BuyerDashboard'
 import { AdminDashboard } from './pages/AdminDashboard'
-import { ProductPage } from './pages/ProductPage'
-import { SearchPage } from './pages/SearchPage'
+import { EnhancedProductPage } from './components/EnhancedProductPage'
+import { AdvancedSearch } from './pages/AdvancedSearch'
+import type { Product } from './types'
+import { useState, useEffect } from 'react'
 
 function App() {
   return (
-    <AuthProvider>
+    <DjassaProvider>
       <BrowserRouter>
         <div style={{ minHeight: '100vh', background: 'var(--paper)' }}>
           <Header />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/search" element={<SearchPage />} />
+            <Route path="/product/:id" element={<ProductWrapper />} />
+            <Route path="/search" element={<AdvancedSearch />} />
             <Route path="/dashboard/seller" element={<SellerDashboard />} />
             <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
@@ -83,8 +85,49 @@ function App() {
           </footer>
         </div>
       </BrowserRouter>
-    </AuthProvider>
+    </DjassaProvider>
   )
+}
+
+// Wrapper component to fetch product data and pass to EnhancedProductPage
+function ProductWrapper() {
+  const { id } = useParams<{ id: string }>()
+  const [product, setProduct] = useState<Product | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // In production, fetch from Supabase
+    // For demo, return mock data
+    setTimeout(() => {
+      setProduct({
+        id: id || '1',
+        title: 'iPhone 14 Pro Max',
+        description: 'Excellent état, acheté en France',
+        price: 850000,
+        currency: 'FCFA',
+        location: 'Abidjan, Cocody',
+        category: 'Téléphones',
+        images: [],
+        seller_id: '1',
+        seller_phone: '2250707070707',
+        seller_name: 'Kouamé',
+        status: 'active',
+        condition: 'used-excellent',
+        negotiable: true,
+        views: 120,
+        favoritesCount: 8,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      setLoading(false)
+    }, 100)
+  }, [id])
+
+  if (loading || !product) {
+    return <div className="container-wide" style={{ padding: '80px 0', textAlign: 'center' }}>Chargement...</div>
+  }
+
+  return <EnhancedProductPage product={product} />
 }
 
 export default App
