@@ -13,6 +13,10 @@ interface DjassaContextType {
   toggleFavorite: (productId: string) => Promise<void>
   markNotificationRead: (notificationId: string) => Promise<void>
   incrementView: (productId: string) => Promise<void>
+  // Semaine 1-2 features
+  uploadImages: (files: File[]) => Promise<string[]>
+  getUserLocation: () => Promise<{ lat: number; lng: number; address?: string }>
+  createProduct: (productData: Partial<Product>) => Promise<void>
 }
 
 const DjassaContext = createContext<DjassaContextType | undefined>(undefined)
@@ -226,6 +230,77 @@ export function DjassaProvider({ children }: { children: ReactNode }) {
       console.log('Could not increment view count')
     }
   }
+  // Semaine 1-2: Upload d'images
+  const uploadImages = async (files: File[]): Promise<string[]> => {
+    if (!user) throw new Error('Utilisateur non connecté')
+    
+    const urls: string[] = []
+    
+    for (const file of files) {
+      try {
+        const url = await import('../lib/supabase').then(m => 
+          m.uploadProductImage(file, user!.id)
+        )
+        urls.push(url)
+      } catch (error) {
+        console.error('Erreur upload image:', error)
+        // Fallback: URL locale pour mode démo
+        urls.push(URL.createObjectURL(file))
+      }
+    }
+    
+    return urls
+  }
+
+  // Semaine 1-2: Géolocalisation
+  const getUserLocation = async () => {
+    return await import('../lib/supabase').then(m => 
+      m.getCurrentLocation()
+    )
+  }
+
+  // Semaine 1-2: Création de produit
+  const createProduct = async (productData: Partial<Product>) => {
+    if (!user) throw new Error('Utilisateur non connecté')
+
+    const newProduct: Product = {
+      id: `product_${Date.now()}`,
+      title: productData.title || '',
+      description: productData.description || '',
+      price: productData.price || 0,
+      currency: productData.currency || 'XOF',
+      category: productData.category as any || "",
+      images: productData.images || [],
+      location: productData.location as any || { country: "CI", city: "" },
+      seller_id: user.id,
+      seller_phone: user.phone || "",
+      favoritesCount: 0,
+      status: 'active',
+      condition: (productData.condition as any) || 'used-good',
+      negotiable: productData.negotiable ?? true,
+      views: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+
+    // Sauvegarder dans localStorage (mode démo) ou Supabase (prod)
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .insert([newProduct])
+        .select()
+        .single()
+      
+      if (error) throw error
+      return data
+    } catch (e) {
+      // Mode démo: localStorage
+      const products = JSON.parse(localStorage.getItem('djassa_products') || '[]')
+      products.push(newProduct)
+      localStorage.setItem('djassa_products', JSON.stringify(products))
+      return newProduct
+    }
+  }
 
   return (
     <DjassaContext.Provider value={{ 
@@ -238,7 +313,10 @@ export function DjassaProvider({ children }: { children: ReactNode }) {
       logout,
       toggleFavorite,
       markNotificationRead,
-      incrementView
+      incrementView,
+      uploadImages,
+      getUserLocation,
+      createProduct
     }}>
       {children}
     </DjassaContext.Provider>
