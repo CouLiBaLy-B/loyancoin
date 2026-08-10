@@ -1,352 +1,274 @@
-# 🚀 Djassa - MVP Features & Roadmap
+# 🗺️ Roadmap de Développement - Djassa
 
-## ✅ Fonctionnalités MVP Implémentées
+## Statut Actuel : Semaines 1-2 ✅ COMPLÉTÉ
 
-### 1. Authentification & Utilisateurs
-- [x] Connexion via WhatsApp avec code OTP (simulation)
-- [x] Trois rôles : Acheteur, Vendeur, Admin
-- [x] Profils utilisateurs avec rating et vérification
-- [x] Gestion de session locale (localStorage)
+### Fonctionnalités Implémentées
 
-### 2. Annonces & Produits
-- [x] CRUD complet des annonces (Create, Read, Update, Delete)
-- [x] Statuts : active, sold, pending, reserved
-- [x] Conditions : new, used-excellent, used-good, used-fair
-- [x] Prix négociable ou fixe
-- [x] Compteur de vues et favoris
-- [x] Galerie d'images multiple
-- [x] Catégories et localisations
+#### ✅ Semaine 1 - Upload d'images et Storage
+- [x] **Supabase Storage Integration**
+  - Module `src/lib/storage.ts` créé
+  - Upload d'images avec optimisation côté client
+  - Compression automatique (max 1920px, qualité 80%)
+  - Support multi-images (jusqu'à 5 par produit)
+  - Gestion des erreurs et fallback
+  
+- [x] **Composant ImageUploader amélioré**
+  - Prévisualisation immédiate (blob URLs)
+  - Upload en arrière-plan
+  - Barre de progression
+  - Suppression d'images
+  - Conseils pour de meilleures photos
+  
+- [x] **Page CreateProduct mise à jour**
+  - Intégration du nouveau flux d'upload
+  - Optimisation avant upload
+  - Progress tracking (10% → 30% → 60% → 90% → 100%)
+  - Gestion mode offline (localStorage)
 
-### 3. Recherche Avancée
-- [x] Recherche textuelle
-- [x] Filtres par catégorie, prix, condition, localisation
-- [x] Tri : récent, ancien, prix, popularité
-- [x] Vue grille/liste
-- [x] Historique de recherche (prévu)
-
-### 4. Communication WhatsApp
-- [x] Bouton "Contacter sur WhatsApp"
-- [x] Message pré-rempli avec détails produit
-- [x] Liens wa.me optimisés
-- [x] Pas de paiement en ligne (conforme marché africain)
-
-### 5. Fonctionnalités Sociales
-- [x] Système de favoris
-- [x] Partage d'annonces (Web Share API + clipboard)
-- [x] Notifications (système, messages, likes)
-- [ ] Reviews & ratings (structure prête)
-
-### 6. Dashboards
-- [x] Dashboard Vendeur :
-  - Mes annonces
-  - Statistiques (vues, favoris)
-  - Ajouter/modifier/supprimer
-- [x] Dashboard Acheteur :
-  - Favoris
-  - Historique
-  - Notifications
-- [x] Dashboard Admin :
-  - Modération annonces
-  - Gestion utilisateurs
-  - Statistiques plateforme
-
-### 7. Design & UX
-- [x] Design System "Loyancé" premium
-- [x] Mobile-first responsive
-- [x] Couleurs adaptées au marché africain
-- [x] Typographie élégante (Serif display + Sans body)
-- [x] Micro-interactions subtiles
-
-### 8. Technique
-- [x] React + TypeScript
-- [x] Supabase integration (optionnel)
-- [x] Mode démo sans backend
-- [x] Build Vercel-ready
-- [x] CSS variables pour theming
+#### ✅ Semaine 2 - Géolocalisation
+- [x] **Composant LocationPicker**
+  - Détection automatique de position
+  - Affichage sur carte (Leaflet/OpenStreetMap)
+  - Recherche d'adresse
+  - Villes principales d'Afrique de l'Ouest pré-configurées
+  
+- [x] **Intégration dans CreateProduct**
+  - Sélection obligatoire de localisation
+  - Affichage ville + pays
+  - Coordonnées GPS stockées
 
 ---
 
-## 🎯 Features à Ajouter pour Production
+## 📅 Semaine 3-4 - À IMPLÉMENTER
 
-### Phase 1 : Core Business (Semaines 1-2)
+### Objectif: Confiance & Sécurité
 
-#### 1.1 Upload d'Images Réel
+#### 🎯 Vérification d'Identité
 ```typescript
-// À implémenter dans AddProductModal
-- Intégration Supabase Storage
-- Compression d'images côté client
-- Multiple image upload with preview
-- Progress indicators
-```
-
-#### 1.2 Géolocalisation Précise
-```typescript
-// Nouvelle page : MapView.tsx
-- Integration Google Maps / Mapbox
-- Rayon de recherche en km
-- Affichage des annonces sur carte
-- "Annonces près de moi"
-```
-
-#### 1.3 Notifications Push
-```typescript
-// Service: notifications.ts
-- Firebase Cloud Messaging
-- Notifications navigateur
-- Rappels de panier/favoris
-- Alertes prix (baisse de prix sur favoris)
-```
-
-### Phase 2 : Confiance & Sécurité (Semaines 3-4)
-
-#### 2.1 Vérification Identité
-```typescript
-// Pages: Verification.tsx
-- Upload pièce d'identité
-- Selfie de verification
-- Badge "Vendeur Vérifié"
-- Niveau de confiance (0-100%)
-```
-
-#### 2.2 Système de Reviews
-```typescript
-// Composant: ReviewModal.tsx
-- Notation 1-5 étoiles
-- Commentaires avec modération
-- Response du vendeur
-- Signalement d'avis frauduleux
-```
-
-#### 2.3 Signalement & Modération
-```typescript
-// Dashboard Admin amélioré
-- Signaler une annonce (spam, arnaque, interdit)
-- File de modération
-- Suspension automatique (mots-clés)
-- Blacklist utilisateurs
-```
-
-### Phase 3 : Engagement (Semaines 5-6)
-
-#### 3.1 Alerts Personnalisées
-```typescript
-// Page: Alerts.tsx
-- Créer une alerte de recherche
-- Notification email/SMS/WhatsApp
-- Fréquence : instantanée, quotidienne, hebdo
-- "Nouveautés dans votre région"
-```
-
-#### 3.2 Boost d'Annonces (Premium)
-```typescript
-// Dashboard Vendeur + Paiement
-- Mettre en avant (top listing)
-- Urgent badge
-- Homepage featured
-- Relance automatique (7 jours)
-```
-
-#### 3.3 Messagerie Interne
-```typescript
-// Page: Messages.tsx
-- Chat en temps réel (Supabase Realtime)
-- Historique des conversations
-- Pièces jointes
-- Traduction automatique (optionnel)
-```
-
-### Phase 4 : Expansion (Semaines 7-8)
-
-#### 4.1 Multi-Pays & Devises
-```typescript
-// Context: LocaleContext.tsx
-- Détection automatique pays
-- Conversion FCFA ↔ autres devises
-- Langues : FR, EN, PT
-- Spécificités par pays
-```
-
-#### 4.2 Categories Spécialisées
-```typescript
-// Templates par catégorie
-- Véhicules : KM, année, carburant
-- Immobilier : m², pièces, étage
-- Emploi : CDI/CDD, salaire, remote
-- Services : tarifs, disponibilités
-```
-
-#### 4.3 Analytics Vendeur
-```typescript
-// Dashboard Vendeur → Stats
-- Graphiques de vues (Chart.js)
-- Taux de conversion (vues → contacts)
-- Meilleurs horaires de publication
-- Comparaison avec marché
-```
-
----
-
-## 📊 Metrics de Succès (KPIs)
-
-| Metric | Cible MVP | Cible Production |
-|--------|-----------|------------------|
-| Utilisateurs actifs/jour | 100 | 1,000+ |
-| Annonces publiées/jour | 20 | 200+ |
-| Taux de conversion (vue→contact) | 5% | 10%+ |
-| Temps moyen sur site | 3 min | 8+ min |
-| Retention J+7 | 20% | 40%+ |
-| Notes moyennes vendeurs | 4.0/5 | 4.5/5 |
-
----
-
-## 🔧 Stack Technique Recommandée
-
-### Backend (Supabase)
-```sql
--- Tables additionnelles à créer
-CREATE TABLE reviews (
-  id UUID PRIMARY KEY,
-  product_id UUID REFERENCES products(id),
-  buyer_id UUID REFERENCES users(id),
-  rating INT CHECK (rating >= 1 AND rating <= 5),
-  comment TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TABLE alerts (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  query TEXT,
-  category TEXT,
-  location TEXT,
-  price_min INT,
-  price_max INT,
-  frequency TEXT CHECK (frequency IN ('instant', 'daily', 'weekly')),
-  active BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TABLE verifications (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES users(id),
-  id_document_url TEXT,
-  selfie_url TEXT,
-  status TEXT CHECK (status IN ('pending', 'approved', 'rejected')),
-  verified_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### Services Externes
-| Service | Usage | Coût Estimé |
-|---------|-------|-------------|
-| WhatsApp Business API | Envoi codes OTP | $0.005/msg |
-| Firebase Cloud Messaging | Notifications push | Gratuit (<1M) |
-| Cloudinary | Optimisation images | Gratuit (<25GB) |
-| Mapbox | Cartes géo | Gratuit (<50k vues) |
-| Sentry | Error tracking | Gratuit (<5k erreurs) |
-
----
-
-## 📱 Mobile : PWA vs Native
-
-### Option 1 : PWA (Recommandé pour MVP)
-```json
-// manifest.json
-{
-  "name": "Djassa",
-  "short_name": "Djassa",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#f5f3ee",
-  "theme_color": "#203027",
-  "icons": [...]
+// Nouveau champ User
+interface User {
+  // ... champs existants
+  idVerified: boolean;
+  idType?: 'cni' | 'passport' | 'driver_license';
+  idDocumentUrl?: string;
+  verificationStatus: 'pending' | 'verified' | 'rejected';
+  verifiedAt?: string;
 }
 ```
-**Avantages** : 
-- Développement unique (web)
-- Pas de stores Apple/Google
-- Mises à jour instantanées
-- Coût réduit
 
-### Option 2 : React Native (Phase 2)
-- Code sharing avec web (~70%)
-- Meilleures performances
-- Accès natif (camera, GPS)
-- Présence app stores
+**Tâches:**
+- [ ] Page de soumission de documents d'identité
+- [ ] Upload sécurisé vers Supabase Storage (bucket privé)
+- [ ] Dashboard admin pour validation manuelle
+- [ ] Badge "Vendeur vérifié" sur les annonces
+- [ ] Notification SMS/WhatsApp après validation
+
+#### ⭐ Système de Reviews 1-5 Étoiles
+```typescript
+interface Review {
+  id: string;
+  product_id: string;
+  buyer_id: string;
+  seller_id: string;
+  rating: number; // 1-5
+  comment: string;
+  response?: string; // Réponse du vendeur
+  created_at: string;
+  helpful_count: number;
+}
+```
+
+**Tâches:**
+- [ ] Composant StarRating (affichage + saisie)
+- [ ] Formulaire de review post-achat
+- [ ] Calcul automatique du rating moyen vendeur
+- [ ] Affichage des reviews sur le profil vendeur
+- [ ] Modération des reviews (signalement)
+
+#### 🚨 Signalement et Modération
+```typescript
+interface Report {
+  id: string;
+  product_id?: string;
+  user_id?: string;
+  reporter_id: string;
+  reason: 'spam' | 'fraud' | 'inappropriate' | 'duplicate' | 'other';
+  description: string;
+  status: 'pending' | 'reviewed' | 'action_taken';
+  created_at: string;
+}
+```
+
+**Tâches:**
+- [ ] Bouton "Signaler" sur chaque annonce
+- [ ] Formulaire de signalement avec motifs
+- [ ] Dashboard admin des signalements
+- [ ] Actions: masquer, supprimer, bannir
+- [ ] Historique des actions de modération
 
 ---
 
-## 💰 Modèle Économique
+## 📅 Semaine 5-6 - Notifications & Engagement
 
-### Gratuit
-- Publication illimitée d'annonces
-- Recherche et filtres
-- Contact WhatsApp
-- 5 photos par annonce
+### Push Notifications Navigateur
+- [ ] Permission browser notifications
+- [ ] Service Worker configuration
+- [ ] Notifications: nouveau message, prix baissé, favori
+- [ ] Badge non-lus dans le header
 
-### Premium (2,99€/mois ou 1,500 FCFA/mois)
-- Annonces boostées (x5 visibilité)
-- 20 photos par annonce
-- Badge "Vendeur Pro"
-- Statistiques détaillées
-- Support prioritaire
+### Notifications In-App
+- [ ] Centre de notifications (cloche header)
+- [ ] Marquer comme lu/non-lu
+- [ ] Pagination des notifications
+- [ ] Préférences de notification par utilisateur
 
-### Commission (Optionnel)
-- Catégories spéciales (Immobilier, Véhicules pro)
-- 1-3% sur transactions facilitées
-- Optionnel car pas de paiement in-app
+### Favoris Avancés
+- [ ] Alertes prix sur favoris
+- [ ] Notification si produit favori vendu
+- [ ] Collections de favoris (thématiques)
 
 ---
 
-## 🚀 Checklist Pré-Production
+## 📅 Semaine 7-8 - Performance & Mobile
 
-### Technique
-- [ ] Tests unitaires (Vitest)
-- [ ] Tests E2E (Playwright)
-- [ ] Error tracking (Sentry)
-- [ ] Analytics (Plausible/Google)
-- [ ] SEO optimization (meta tags, sitemap)
-- [ ] Performance (Lighthouse >90)
-- [ ] Security headers
-- [ ] HTTPS enforcement
-- [ ] Rate limiting API
+### Progressive Web App (PWA)
+- [ ] Manifest.json configuration
+- [ ] Service Worker pour cache offline
+- [ ] Installation sur écran d'accueil
+- [ ] Mode offline partiel (voir annonces visitées)
+
+### Optimisations Mobile
+- [ ] Lazy loading images (Intersection Observer)
+- [ ] Infinite scroll sur liste produits
+- [ ] Swipe gestures (back, delete)
+- [ ] Bottom navigation bar mobile
+
+### Performance
+- [ ] Code splitting par route
+- [ ] Image CDN (Cloudinary ou Imgix)
+- [ ] Database indexes optimization
+- [ ] Lighthouse score > 90
+
+---
+
+## 📅 Semaine 9-10 - Analytics & Monétisation
+
+### Analytics Dashboard (Admin)
+- [ ] Nombre d'annonces par jour/semaine
+- [ ] Utilisateurs actifs (DAU/MAU)
+- [ ] Catégories populaires
+- [ ] Taux de conversion (vue → contact WhatsApp)
+- [ ] Géographie des utilisateurs
+
+### Options Premium (Future Revenue)
+- [ ] Annonces mises en avant (bannière "Sponsorisé")
+- [ ] Boost de visibilité (top de liste 7 jours)
+- [ ] Badge "Vendeur Pro"
+- [ ] Statistiques avancées pour vendeurs
+- [ ] API accès pour entreprises
+
+---
+
+## 🎯 KPIs de Succès (Post-Launch)
+
+| Métrique | Cible J+30 | Cible J+90 |
+|----------|-----------|-----------|
+| Utilisateurs inscrits | 500 | 5,000 |
+| Annonces actives | 200 | 2,000 |
+| Taux de réponse vendeur | 60% | 80% |
+| Temps moyen avant vente | 14 jours | 7 jours |
+| NPS (Net Promoter Score) | 30 | 50 |
+| Revenu mensuel | $0 | $2,000 |
+
+---
+
+## 🛠️ Stack Technique Détaillée
+
+### Frontend
+- **Framework**: React 18 + TypeScript
+- **Routing**: React Router v6
+- **State**: Context API + localStorage
+- **Styling**: Inline styles + CSS variables (Loyancé Design System)
+- **Icons**: Lucide React
+- **Maps**: Leaflet + OpenStreetMap
+- **Build**: Vite
+
+### Backend (Supabase)
+- **Database**: PostgreSQL
+- **Auth**: Phone-based (WhatsApp)
+- **Storage**: Supabase Storage (product-images, id-documents)
+- **Realtime**: Supabase Realtime (messages, notifications)
+- **Edge Functions**: Pour webhooks WhatsApp (futur)
+
+### Infrastructure
+- **Hosting**: Vercel (Frontend)
+- **Database**: Supabase (Backend-as-a-Service)
+- **CDN**: Vercel Edge Network
+- **Analytics**: Vercel Analytics + Custom
+
+---
+
+## 📝 Checklist Pré-Production
+
+### Sécurité
+- [ ] RLS (Row Level Security) activé sur toutes les tables
+- [ ] Rate limiting sur API endpoints
+- [ ] Validation input côté serveur
+- [ ] HTTPS obligatoire
+- [ ] CORS configuré correctement
 
 ### Légal
-- [ ] CGU/CGV
+- [ ] CGU/CGV rédigées
 - [ ] Politique de confidentialité
-- [ ] Cookie consent
+- [ ] Conformité RGPD (droit à l'oubli)
 - [ ] Mentions légales
-- [ ] Conformité RGPD/local
+- [ ] Gestion cookies (banner)
 
-### Business
-- [ ] Support client (email/WhatsApp)
-- [ ] FAQ complète
-- [ ] Tutoriels vidéo
-- [ ] Programme ambassadeurs
-- [ ] Partenariats locaux
+### Tests
+- [ ] Tests unitaires (Vitest)
+- [ ] Tests E2E (Playwright)
+- [ ] Tests manuels mobile (iOS/Android)
+- [ ] Load testing (1000 utilisateurs simultanés)
 
----
-
-## 📅 Timeline Suggérée
-
-| Semaine | Objectif | Livrables |
-|---------|----------|-----------|
-| 1-2 | Images + Géoloc | Upload fonctionnel, carte interactive |
-| 3-4 | Confiance | Vérification ID, reviews, modération |
-| 5-6 | Engagement | Alerts, messagerie, boosts |
-| 7-8 | Expansion | Multi-pays, analytics, templates |
-| 9 | Tests & QA | Bug fixes, performance |
-| 10 | Launch | Marketing, support, monitoring |
+### Documentation
+- [ ] README complet
+- [ ] Guide de déploiement
+- [ ] API documentation
+- [ ] Guide utilisateur (FAQ)
 
 ---
 
-## 🎉 Prêt pour le Launch !
+## 🚀 Commandes Utiles
 
-Le MVP est **fonctionnel** et peut être déployé immédiatement pour :
-- Tester le marché
-- Recueillir les premiers feedbacks
-- Valider le product-market fit
-- Commencer l'acquisition utilisateurs
+```bash
+# Développement local
+npm run dev
 
-**Prochaine étape** : Déploiement sur Vercel + configuration Supabase production.
+# Build production
+npm run build
+
+# Preview build
+npm run preview
+
+# Type checking
+npx tsc --noEmit
+
+# Linting
+npm run lint
+
+# Tests
+npm run test
+```
+
+---
+
+## 📞 Support & Contact
+
+- **Email**: support@djassa.africa (à créer)
+- **WhatsApp Business**: +225 XX XX XX XX XX (à configurer)
+- **Documentation**: https://djassa.africa/docs
+
+---
+
+*Dernière mise à jour: 2025*
+*Version: 1.0.0*
