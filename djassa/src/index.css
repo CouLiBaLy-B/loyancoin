@@ -1,0 +1,363 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f5f3ee;
+  --paper-deep: #ebe8df;
+  --ink: #1d2821;
+  --ink-soft: #4c554d;
+  --moss: #203027;
+  --moss-light: #30463a;
+  --clay: #c88970;
+  --clay-light: #e6b9a5;
+  --line: #d9d6cd;
+  --white: #fffdf8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6, .wordmark {
+  font-family: var(--font-display);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--clay);
+}
+
+.container-wide {
+  width: min(1380px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container-wide {
+    width: calc(100% - 32px);
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  text-decoration: none;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button--dark {
+  background-color: var(--ink);
+  color: var(--white);
+}
+
+.button--light {
+  background-color: var(--white);
+  color: var(--ink);
+}
+
+.button--clay {
+  background-color: var(--clay);
+  color: var(--white);
+}
+
+.underlined-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  transition: all 0.2s ease;
+}
+
+.underlined-link:hover {
+  gap: 10px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
+}
+
+.section-heading h2 {
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 1.1;
+  margin-top: 12px;
+}
+
+.section-heading h2 em {
+  font-style: italic;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px 17px;
+}
+
+@media (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.product-card {
+  background: transparent;
+}
+
+.product-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--paper-deep);
+  margin-bottom: 16px;
+}
+
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.product-card:hover .product-card__image {
+  transform: scale(1.04);
+}
+
+.product-card__eyebrow {
+  margin-bottom: 8px;
+}
+
+.product-card__title {
+  font-size: 20px;
+  font-family: var(--font-display);
+  margin-bottom: 8px;
+}
+
+.product-card__price {
+  font-family: var(--font-sans);
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.marquee-band {
+  background-color: var(--clay);
+  color: var(--ink);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-content span {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 32px;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile responsive utilities */
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+}
+
+/* Form styles */
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  background-color: var(--white);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--clay);
+}
+
+/* Card styles */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 24px;
+}
+
+/* WhatsApp button */
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #25D366;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.whatsapp-btn:hover {
+  background-color: #128C7E;
+}
+
+/* Auth forms */
+.auth-container {
+  max-width: 440px;
+  margin: 60px auto;
+  padding: 48px;
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+
+.auth-title {
+  font-size: 28px;
+  font-family: var(--font-display);
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: var(--ink-soft);
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+
+/* Dashboard layouts */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  background: var(--moss);
+  color: var(--white);
+  padding: 32px 24px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 12px 16px;
+  color: var(--clay-light);
+  text-decoration: none;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: var(--moss-light);
+  color: var(--white);
+}
+
+.dashboard-content {
+  padding: 48px;
+  background: var(--paper);
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 24px;
+  }
+}
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge--active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge--pending {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge--sold {
+  background: #fee2e2;
+  color: #991b1b;
+}
