@@ -2,18 +2,19 @@
 # Dependencies
 node_modules/
 
-# Build artifacts
+# Build outputs
 dist/
 build/
-*.js.map
-*.ts.map
+*.js
+*.ts
+*.tsx
 
-# Environment
+# Environment variables
 .env
 .env.local
-.env.*
+*.env.*
 
-# Editors
+# IDE files
 .vscode/
 .idea/
 *.swp
@@ -22,55 +23,35 @@ build/
 # Logs
 *.log
 
-# Coverage
+# Temporary files
+*.tmp
+
+# Coverage reports
 coverage/
 htmlcov/
-.coverage
+*.coverage
 
-# Python
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.nox/
-.pytest_cache/
-.mypy_cache/
 
-# Temporary files
-*.tmp
-*.temp
+# TypeScript/JavaScript cache
+*.tsbuildinfo
+.npm/
+.yarn/
+
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# Testing
+.jest/
+.nyc_output/
+coverage/
+
+# Security
+secret.key
+private.pem
 ```
