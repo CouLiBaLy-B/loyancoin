@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom'
 import { ArrowLeft, MapPin, MessageCircle, Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -36,9 +35,7 @@ Prix légèrement négociable.`,
 }
 
 export function ProductPage() {
-  const { id } = useParams<{ id: string }>()
-  
-  // In production, fetch product from Supabase
+  // In production, fetch product from Supabase using the id
   const product = mockProduct
 
   const whatsappMessage = `Bonjour, je suis intéressé par votre annonce: ${product.title}`

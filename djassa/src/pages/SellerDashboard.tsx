@@ -3,7 +3,8 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { Navigate } from 'react-router-dom'
 import { Plus, Package, MessageCircle, DollarSign, Settings, LogOut } from 'lucide-react'
-import { Product } from '../types'
+import type { Product } from '../types'
+import { AddProductModal } from '../components/AddProductModal'
 
 export function SellerDashboard() {
   const { user, logout } = useAuth()
@@ -50,6 +51,23 @@ export function SellerDashboard() {
       ))
     } catch (error) {
       console.error('Error updating status:', error)
+    }
+  }
+
+  const handleDeleteProduct = async (productId: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) return
+    
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productId)
+
+      if (error) throw error
+      
+      setProducts(products.filter(p => p.id !== productId))
+    } catch (error) {
+      console.error('Error deleting product:', error)
     }
   }
 
@@ -191,15 +209,23 @@ export function SellerDashboard() {
                       </span>
                     </td>
                     <td style={{ padding: '16px 24px' }}>
-                      <select
-                        value={product.status}
-                        onChange={(e) => handleStatusChange(product.id, e.target.value as 'active' | 'sold' | 'pending')}
-                        style={{ padding: '8px 12px', border: '1px solid var(--line)', background: 'var(--white)', cursor: 'pointer' }}
-                      >
-                        <option value="active">Actif</option>
-                        <option value="pending">En attente</option>
-                        <option value="sold">Vendu</option>
-                      </select>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <select
+                          value={product.status}
+                          onChange={(e) => handleStatusChange(product.id, e.target.value as 'active' | 'sold' | 'pending')}
+                          style={{ padding: '8px 12px', border: '1px solid var(--line)', background: 'var(--white)', cursor: 'pointer' }}
+                        >
+                          <option value="active">Actif</option>
+                          <option value="pending">En attente</option>
+                          <option value="sold">Vendu</option>
+                        </select>
+                        <button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          style={{ padding: '8px 12px', border: '1px solid var(--line)', background: 'var(--white)', cursor: 'pointer', color: '#dc2626' }}
+                        >
+                          Supprimer
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -211,53 +237,10 @@ export function SellerDashboard() {
 
       {/* Add Product Modal */}
       {showAddModal && (
-        <div style={{ 
-          position: 'fixed', 
-          top: 0, 
-          left: 0, 
-          right: 0, 
-          bottom: 0, 
-          background: 'rgba(0,0,0,0.5)', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div style={{ 
-            background: 'var(--white)', 
-            padding: '40px', 
-            maxWidth: '600px', 
-            width: '90%',
-            maxHeight: '90vh',
-            overflow: 'auto'
-          }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', marginBottom: '24px' }}>
-              Nouvelle Annonce
-            </h2>
-            <form onSubmit={(e) => {
-              e.preventDefault()
-              setShowAddModal(false)
-              // Handle form submission
-            }}>
-              {/* Form fields would go here */}
-              <p style={{ color: 'var(--ink-soft)', marginBottom: '24px' }}>
-                Formulaire d'ajout de produit (à implémenter)
-              </p>
-              <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
-                <button 
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="button button--light"
-                >
-                  Annuler
-                </button>
-                <button type="submit" className="button button--clay">
-                  Publier l'annonce
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <AddProductModal 
+          onClose={() => setShowAddModal(false)}
+          onSuccess={fetchProducts}
+        />
       )}
     </div>
   )

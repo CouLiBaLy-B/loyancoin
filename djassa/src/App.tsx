@@ -7,6 +7,7 @@ import { SellerDashboard } from './pages/SellerDashboard'
 import { BuyerDashboard } from './pages/BuyerDashboard'
 import { AdminDashboard } from './pages/AdminDashboard'
 import { ProductPage } from './pages/ProductPage'
+import { SearchPage } from './pages/SearchPage'
 
 function App() {
   return (
@@ -18,19 +19,14 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/dashboard/seller" element={<SellerDashboard />} />
             <Route path="/dashboard/buyer" element={<BuyerDashboard />} />
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
-            <Route path="/search" element={
-              <div className="container-wide" style={{ padding: '80px 0' }}>
-                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px' }}>Recherche</h1>
-                <p style={{ color: 'var(--ink-soft)', marginTop: '16px' }}>Page de recherche à implémenter</p>
-              </div>
-            } />
             <Route path="/categories" element={
               <div className="container-wide" style={{ padding: '80px 0' }}>
                 <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '32px' }}>Catégories</h1>
-                <p style={{ color: 'var(--ink-soft)', marginTop: '16px' }}>Page des catégories à implémenter</p>
+                <p style={{ color: 'var(--ink-soft)', marginTop: '16px' }}>Parcourez toutes les catégories</p>
               </div>
             } />
           </Routes>
@@ -62,9 +58,9 @@ function App() {
                     Catégories
                   </h4>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: 'var(--ink-soft)' }}>
-                    <li><a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Téléphones</a></li>
-                    <li><a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Véhicules</a></li>
-                    <li><a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Immobilier</a></li>
+                    <li><a href="/search?category=Téléphones" style={{ color: 'inherit', textDecoration: 'none' }}>Téléphones</a></li>
+                    <li><a href="/search?category=Véhicules" style={{ color: 'inherit', textDecoration: 'none' }}>Véhicules</a></li>
+                    <li><a href="/search?category=Immobilier" style={{ color: 'inherit', textDecoration: 'none' }}>Immobilier</a></li>
                   </ul>
                 </div>
                 <div>

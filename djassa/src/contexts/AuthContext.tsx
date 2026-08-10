@@ -28,13 +28,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       console.log('Sending code to:', phone)
       
-      const { data, error } = await supabase
+      const { error: fetchError } = await supabase
         .from('users')
         .select('*')
         .eq('phone', phone)
         .single()
 
-      if (error && error.code !== 'PGRST116') {
+      if (fetchError && fetchError.code !== 'PGRST116') {
         const { error: createError } = await supabase
           .from('users')
           .insert([{ phone, role: 'buyer' }])
